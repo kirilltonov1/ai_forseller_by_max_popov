@@ -52,8 +52,12 @@ document.getElementById('form').addEventListener('submit',async e=>{
     @app.post("/api/first-setup")
     def setup_admin(body: SetupInput, request: Request):
         configured = os.environ.get("FIRST_SETUP_CODE", "")
-        if len(configured) < 32 or not hmac.compare_digest(body.code.encode(), configured.encode()):
-            raise HTTPException(403, "Неверный код установки")
+        if len(configured) < 32:
+            raise HTTPException(503, "В Railway код FIRST_SETUP_CODE должен содержать минимум 32 символа. Измените его и примените Deploy.")
+        if len(body.code) < 32:
+            raise HTTPException(400, "Введённый код слишком короткий: требуется минимум 32 символа.")
+        if not hmac.compare_digest(body.code.encode(), configured.encode()):
+            raise HTTPException(403, "Код не совпадает с FIRST_SETUP_CODE в Railway. Скопируйте его целиком, без пробелов.")
         if body.email.strip().lower() != os.environ.get("FIRST_ADMIN_EMAIL","").strip().lower():
             raise HTTPException(403, "Укажи почту владельца, указанную при настройке")
         if len(body.password) < 12 or len(body.password) > 256:
