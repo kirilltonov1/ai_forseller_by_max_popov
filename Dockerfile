@@ -18,4 +18,4 @@ COPY web/ ./web/
 COPY --from=frontend /src/web/frontend/dist ./web/frontend/dist
 RUN mkdir -p /app/data
 EXPOSE 8080
-CMD ["sh", "-c", "python -c 'from stometric import db; db.migrate()' && exec uvicorn stometric.web:app --host 0.0.0.0 --port ${PORT:-8080}"]
+CMD ["sh", "-c", "python -m scripts.railway_init && exec uvicorn stometric.web:app --host 0.0.0.0 --port ${PORT:-8080}"]
