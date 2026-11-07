@@ -1234,6 +1234,9 @@ app.include_router(api_ai_tasks.router)
 from . import api_calendar  
 app.include_router(api_calendar.router)
 
+from .first_setup import register_first_setup
+register_first_setup(app)
+
 if DIST.exists():
     class _Assets(StaticFiles):
         """Файлы сборки с хэшем в имени — браузер хранит год и не качает заново при каждом открытии."""
