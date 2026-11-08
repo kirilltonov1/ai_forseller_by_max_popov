@@ -119,7 +119,7 @@ def _to_openai(body: dict, p: dict) -> dict:
         if parts:
             msgs.append({"role": "user", "content": parts})
     out = {"model": body["model"], "messages": msgs, p["max"]: body.get("max_tokens") or 2000}
-    # Higher reasoning budget for current GPT-5 tool-capable Chat Completions route.\n    # GPT-6 Astra/Sol with tools requires a separate Responses API adapter.\n    if p is PROVIDERS.get("openai") and str(body["model"]).startswith("gpt-5"):\n        out["reasoning_effort"] = "high"\n    if body.get("tools"):
+    if body.get("tools"):
         out["tools"] = [{"type": "function", "function": {"name": t["name"], "description": t.get("description", ""),
                                                           "parameters": t.get("input_schema") or {"type": "object", "properties": {}}}}
                         for t in body["tools"]]
