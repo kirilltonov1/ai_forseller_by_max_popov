@@ -1233,6 +1233,8 @@ app.include_router(api_mcp.router)
 app.include_router(api_ai_tasks.router)
 from . import api_calendar  
 app.include_router(api_calendar.router)
+from . import api_warehouse
+app.include_router(api_warehouse.router)
 
 if DIST.exists():
     class _Assets(StaticFiles):

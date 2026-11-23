@@ -32,6 +32,7 @@ import { Questions } from "./Questions";
 import { Cards } from "./Cards";
 import { Ads } from "./Ads";
 import { Total } from "./Total";
+import { Warehouse } from "./Warehouse";
 import { Rnp } from "./Rnp";
 import { News } from "./News";
 import { EntryPoints } from "./EntryPoints";
@@ -235,7 +236,7 @@ export default function App() {
     const go = (e: Event) => { setCardsNm((e as CustomEvent<number>).detail); setPage("cards"); };
     window.addEventListener("ais:cards", go); return () => window.removeEventListener("ais:cards", go);
   }, []);
-  const [page, setPage] = useState<Page>(() => (new URLSearchParams(window.location.search).get("hf") ? "account" : "tab"));   // возврат со входа в Higgsfield — в настройки
+  const [page, setPage] = useState<Page>(() => (new URLSearchParams(window.location.search).get("page") === "warehouse" ? "warehouse" : new URLSearchParams(window.location.search).get("hf") ? "account" : "tab"));   // возврат со входа в Higgsfield — в настройки
   const [calendarDay, setCalendarDay] = useState<string | undefined>();
   useEffect(() => { if (page !== "cards") setCardsNm(null); }, [page]);
   useEffect(() => {
@@ -804,6 +805,7 @@ export default function App() {
         {page === "actions" && shop && (isYm ? <div className="hint">Взаимодействия с кабинетом Яндекс Маркета — позже. Магазин Маркета пока только для аналитики.</div>
           : <Actions shop={shop} />)}
         {page === "total" && <Total dark={theme === "dark"} />}
+        {page === "warehouse" && <Warehouse />}
         {page === "kb" && wsId && <Kb wsId={wsId} />}
         {page === "ads" && shop && (isOz || isYm ? <div className="hint">Управление рекламой Ozon — следующим шагом. Выберите магазин WB.</div>
           : <Ads shop={shop} onSettings={() => setPage("actions")} />)}

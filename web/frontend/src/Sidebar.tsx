@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import type { Me, Tab, Workspace } from "./api";
 import { Logo } from "./Logo";
 
-export type Page = "tab" | "account" | "calendar" | "members" | "billing" | "referral" | "admin" | "about" | "service_news" | "reviews" | "questions" | "actions" | "cards" | "seo" | "visual" | "ads" | "total" | "kb" | "ai";
+export type Page = "tab" | "account" | "calendar" | "members" | "billing" | "referral" | "admin" | "about" | "service_news" | "reviews" | "questions" | "actions" | "cards" | "seo" | "visual" | "ads" | "total" | "warehouse" | "kb" | "ai";
 
 const ROLE: Record<string, string> = { owner: "Владелец", admin: "Админ", editor: "Редактор", viewer: "Просмотр" };
 
@@ -65,6 +65,7 @@ export function Sidebar({ me, ws, open, onToggle, page, tab, onTab, onPage, them
         {onAssistant && <button className="side-item" title="Стометрик — умный помощник по магазину" onClick={onAssistant}>
           <span className="ic">🧙</span>{open && <span className="tx">Стометрик</span>}</button>}
         {item("total", "📊", "Сумма магазинов")}
+        {ws?.role === "owner" && item("warehouse", "📦", "Общий склад")}
         {item("kb", "📚", "База знаний")}</>}
         {open && <button className="side-h side-h-btn" onClick={() => flip("__work")}>{shut.__work ? "▸" : "▾"} Работа с кабинетом</button>}
         {!(open && shut.__work) && <>
