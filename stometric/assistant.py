@@ -41,7 +41,7 @@ SYSTEM = """Ты «Стометрик» — весёлый гномик-помо
 - Ничего не меняешь в магазине и сервисе: только читаешь и считаешь. Исключения: себестоимость товаров в сервисе
   (не в кабинете маркетплейса) - черновиком и только по явному согласию пользователя; база знаний - см. ниже."""
 
-from . import assistant_cost, assistant_kb, assistant_market, assistant_seo, assistant_visual  
+from . import assistant_warehouse, assistant_cost, assistant_kb, assistant_market, assistant_seo, assistant_visual
 
 TOOLS = [
     {"name": "list_tabs", "description": "Список вкладок магазина (ключ, название, группа, описание данных).",
@@ -284,10 +284,10 @@ def t_rating_plan(c, shop: int, user_id: int, a: dict) -> dict:
 
 
 TOOL_FN = {"list_tabs": t_list_tabs, "find_products": t_find_products, "get_table": t_get_table, "rating_plan": t_rating_plan,
-           "managers": t_managers,
+           "managers": t_managers, **assistant_warehouse.TOOL_FN,
            **assistant_cost.TOOL_FN, **assistant_kb.TOOL_FN, **assistant_market.TOOL_FN, **assistant_seo.TOOL_FN, **assistant_visual.TOOL_FN}
-TOOLS += assistant_cost.TOOLS + assistant_kb.TOOLS + assistant_market.TOOLS + assistant_seo.TOOLS + assistant_visual.TOOLS
-SYSTEM += assistant_cost.PROMPT + assistant_kb.PROMPT + assistant_market.PROMPT + assistant_seo.PROMPT + assistant_visual.PROMPT
+TOOLS += assistant_warehouse.TOOLS + assistant_cost.TOOLS + assistant_kb.TOOLS + assistant_market.TOOLS + assistant_seo.TOOLS + assistant_visual.TOOLS
+SYSTEM += assistant_warehouse.PROMPT + assistant_cost.PROMPT + assistant_kb.PROMPT + assistant_market.PROMPT + assistant_seo.PROMPT + assistant_visual.PROMPT
 
 
 def _for_model(res: dict) -> str:
@@ -459,7 +459,7 @@ def _api_blocks(text: str, files: list[dict]) -> list | str:
     return blocks
 
 
-STEP_RU = {"list_tabs": "смотрю, какие есть вкладки", "find_products": "ищу товары", "get_table": "беру данные",
+STEP_RU = {"get_warehouse": "проверяю собственный общий склад CRM", "list_tabs": "смотрю, какие есть вкладки", "find_products": "ищу товары", "get_table": "беру данные",
            "propose_costs": "разбираю файл себестоимости", "read_file": "читаю файл", "kb_find": "смотрю базу знаний", "kb_fetch": "открываю ссылку",
            "kb_add": "добавляю в базу знаний", "wildbox_help": "смотрю справку Wildbox", "wildbox": "спрашиваю Wildbox", "seo_prepare": "запускаю SEO", "seo_status": "смотрю SEO",
            "visual_prepare": "запускаю ТЗ на визуал", "visual_status": "смотрю визуал"}
